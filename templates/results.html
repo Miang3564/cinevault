@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - CineVault</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            padding: 40px 60px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .btn-home {
+            background: #e50914;
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-home:hover { background: #b20710; }
+
+        .movie-card {
+            display: flex;
+            background: #1f1f1f;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover { transform: translateY(-4px); border-color: #444; }
+        .movie-poster {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            background: #222;
+        }
+        .movie-info {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .movie-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .movie-meta {
+            font-size: 14px;
+            color: #46d369;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .movie-overview {
+            font-size: 14px;
+            color: #b3b3b3;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .movie-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-watch {
+            background: #e50914;
+            color: white;
+            padding: 12px 26px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .btn-watch:hover { background: #b20710; }
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            background: #1f1f1f;
+            border-radius: 8px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Search Results for: "{{ movie }}"</h1>
+            <a href="/" class="btn-home">Back to Home</a>
+        </div>
+
+        {% if movies %}
+            {% for m in movies %}
+                <div class="movie-card">
+                    {% if m.poster %}
+                        <img src="{{ m.poster }}" alt="{{ m.title }}" class="movie-poster">
+                    {% else %}
+                        <div class="movie-poster" style="display: flex; align-items: center; justify-content: center; color: #777;">No Poster</div>
+                    {% endif %}
+                    
+                    <div class="movie-info">
+                        <div>
+                            <div class="movie-title">{{ m.title }}</div>
+                            <div class="movie-meta">Released: {{ m.release_date }} &nbsp;|&nbsp; Rating: {{ m.vote_average }}/10</div>
+                            <div class="movie-overview">{{ m.overview if m.overview else "No description available for this title." }}</div>
+                        </div>
+                        
+                        <div class="movie-buttons">
+                            <a href="/watch/{{ m.id }}" target="_blank" class="btn-watch">▶ Play Full Movie</a>
+                            <a href="{{ m.trailer }}" target="_blank" class="btn-watch" style="background: #333;">🎬 Watch Trailer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <h2>No movies found matching "{{ movie }}"</h2>
+                <p style="color: #888; margin-top: 10px;">Try searching with a popular title like KGF, Jawan, or Avatar.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
